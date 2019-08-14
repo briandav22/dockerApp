@@ -1,0 +1,11 @@
+127.0.0.1:9200/test_brian
+
+{
+
+    "mappings": {
+      "properties": {
+      	"geoip":{
+      		"properties":{
+      			"location":{"type":"geo_point"
+      		}
+      	}}}}}

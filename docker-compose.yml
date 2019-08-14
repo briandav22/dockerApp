@@ -1,0 +1,55 @@
+version: "2"
+
+services:
+  elasticsearch:
+    build: ./elastic
+    networks:
+      - elk
+    ports: 
+      - "9200:9200"
+      - "9300:9300"
+
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      discovery.type: "single-node"
+
+      
+  
+  logstash:
+    build:
+      context: ./logstash
+    networks:
+      - elk
+    ports:
+      - "5000:5000"
+      - "9600:9600"
+      - "8080:8080"
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+      LS_OPTS: "--config.reload.automatic"
+    volumes:
+      - C:/Users/briand.PLXR/Desktop/ELK/dockerApp/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+      - C:/Users/briand.PLXR/Desktop/ELK/dockerApp/logstash/piplines:/usr/share/logstash/pipeline/
+     
+    tty: true
+    depends_on:
+      - elasticsearch
+
+
+  kibana:
+    build:
+      context: ./kibana
+
+    networks:
+      - elk
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+
+
+
+networks:
+
+  elk:
+    driver: bridge

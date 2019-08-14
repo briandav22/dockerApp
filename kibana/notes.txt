@@ -1,0 +1,1 @@
+formating in bits : 0.[00]a
